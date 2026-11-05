@@ -1,0 +1,48 @@
+seed: 42
+output_dir: runs/faan_xbd
+
+data:
+  root: data/xbd_prepared
+  image_size: 1024
+  batch_size: 2
+  num_workers: 4
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+  augmentation:
+    rotate90: true
+    flip_probability: 0.5
+    crop_scale: [0.8, 1.0]
+
+model:
+  backbone: resnet18
+  pretrained: false
+  wavelet: db4
+  wavelet_levels: 2
+  attention_heads: 8
+  attention_grid: 16
+  tbam_layers: [4, 4, 2]
+  decoder_channels: 112
+  projection_dims: [2048, 512, 256]
+
+pretrain:
+  epochs: 100
+  learning_rate: 0.0001
+  weight_decay: 0.0001
+
+train:
+  epochs: 150
+  learning_rate: 0.00005
+  weight_decay: 0.0001
+  localisation_weight: 0.4
+  classification_weight: 0.6
+  contrastive_weight: 0.1
+  focal_alpha: 0.25
+  focal_gamma: 2.0
+  hard_fraction: 0.3
+  temperature: 0.1
+  queue_size: 65536
+  momentum: 0.999
+  localisation_threshold: 0.5
+  scheduler: cosine
+  amp: true
+  grad_clip_norm: 1.0
